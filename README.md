@@ -1,4 +1,4 @@
-#LLM-Wiki
+# LLM-Wiki
 
 This repository is my Obsidian-based LLM wiki that saves resources for my projects, research, etc.
 
