@@ -3,6 +3,7 @@ This repository is my Obsidian-based LLM wiki where it saves all the information
 ## Purpose
 
 This wiki is a persistent knowledge base maintained by Codex. It is used for:
+
 - software engineering learning
 - cloud computing
 - IoT and embedded systems
@@ -39,6 +40,7 @@ There are three layers:
 The content-oriented catalog of the wiki.
 
 Every important wiki page should be listed in index.md with:
+
 - Obsidian link
 - one-line summary
 - category
@@ -51,6 +53,7 @@ Codex should read index.md first when answering questions about the wiki.
 The chronological append-only history.
 
 Codex should append to log.md after:
+
 - ingesting a new source
 - creating or significantly updating wiki pages
 - answering a major question that should be preserved
@@ -61,10 +64,18 @@ Use this format:
 ## [YYYY-MM-DD] type | title
 
 Summary:
+
 - ...
 
+Sources ingested:
+
+- raw/path/to/source.md
+
 Files changed:
+
 - [[path/to/file]]
+
+For ingest entries, use `Sources ingested:` instead of `Files changed:` as the primary record. Only add `Files changed:` to an ingest log entry when the changed wiki files are unusually important to preserve in the chronological log.
 
 ## Wiki conventions
 
@@ -96,16 +107,25 @@ Each wiki page should usually contain:
 
 ## Maintenance rules
 
-When ingesting a source:
-1. Read the source from raw/.
-2. Identify the main entities, concepts, tools, projects, and claims.
-3. Create or update relevant pages under wiki/.
-4. Add cross-links between related pages.
-5. Update index.md.
-6. Append an entry to log.md.
-7. Flag contradictions instead of silently overwriting old claims.
+When ingesting sources:
+
+1. If the user names specific files, read those sources from raw/.
+2. If the user says "current source", "new source", "newly created data", or does not name a specific file, scan raw/ and ingest every raw file that appears unprocessed.
+3. Treat a raw file as unprocessed when it is not referenced in log.md, index.md, any wiki/ Sources section, or an existing output/ingest-report/ report.
+4. Identify the main entities, concepts, tools, projects, and claims.
+5. Create or update pages under wiki/ only when they are directly grounded in the ingested raw sources.
+6. Create a source summary page for each ingested source or tightly related source batch.
+7. Create separate concept/entity/tool/project pages only when the ingested sources make that item central enough to deserve its own page.
+8. Do not create pages for implementation mechanics, repo administration, Codex behavior, Obsidian setup, ingest/lint/query workflow, or general background knowledge unless the ingested raw sources are explicitly about those topics.
+9. Do not create pages merely because a concept is useful to the repository, mentioned in AGENTS.md, or part of the ingest process.
+10. If a source only supports a short note, keep it inside the source summary page instead of creating a separate page.
+11. Add cross-links only between source-grounded related pages.
+12. Update index.md.
+13. Append an entry to log.md with a `Sources ingested:` section listing every raw file ingested.
+14. Flag contradictions instead of silently overwriting old claims.
 
 When answering a question:
+
 1. Read index.md first.
 2. Search relevant wiki pages.
 3. Answer based on the wiki when possible.
@@ -114,6 +134,7 @@ When answering a question:
 
 When linting the wiki:
 Look for:
+
 - orphan pages
 - missing backlinks
 - stale claims
@@ -129,3 +150,4 @@ Do not remove old claims without preserving context.
 Do not invent citations.
 Do not reorganize the whole vault unless explicitly asked.
 Ask before making large structural changes.
+In general, codex can only create or modify files that are located in `wiki` folder and now allowed to modify any files unless the user gives the permission
